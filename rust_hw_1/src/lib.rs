@@ -8,21 +8,57 @@ pub fn class_number_status(class_number: i32) -> String {
     // 300, and 400 level courses. If the course is in the 500s, return "grad course". 
     // For any other course number, return "invalid course number".
 
-    todo!();
+    return match class_number {
+        128 => "the best class".to_string(),
+        level @ 100..=499 => {
+            let hundred_digit: i32 = level / 100;
+            format!("{}00 level", hundred_digit)
+        },
+        500..=599 => "grad course".to_string(),
+        _ => "invalid course number".to_string(),
+    }
 }
 
 // [COMPLETE THIS FUNCTION - DO NOT MODIFY THE GIVEN FUNCTION SIGNATURE]
 pub fn return_3_point_5_as_double() -> f64 {
     // return the value 3.5 with double precision
 
-    todo!();
+    3.5
 }
 
 // [COMPLETE THIS FUNCTION - DO NOT MODIFY THE GIVEN FUNCTION SIGNATURE]
 pub fn return_rustacean() -> char {
     // Return the rust crab emoji as a character. HINT: https://emojipedia.org/crab/
     
-    todo!();
+    '🦀'
+}
+
+pub fn match_item(item: &str) -> String {
+    enum Category {
+        Electronics,
+        Food,
+        Animal,
+        Movie,
+        Person
+    }
+
+    let category: Option<Category>= match item {
+        "computer" | "television" | "microwave" => Some(Category::Electronics), 
+        "pizza" | "bread" | "pancake" | "banana" | "spaghetti" => Some(Category::Food),
+        "panda" | "giraffe" | "elephant" | "cat" => Some(Category::Animal),
+        "Welby" | "Neil" | "Eustis" | "Ferris" => Some(Category::Person),
+        "Interstellar" | "Spiderman" => Some(Category::Movie),
+        _ => None,
+    };
+
+    match category {
+        Some(Category::Animal) => "animal".to_string(),
+        Some(Category::Electronics) => "electronics".to_string(),
+        Some(Category::Food) => "food".to_string(),
+        Some(Category::Movie) => "movie".to_string(),
+        Some(Category::Person) => "person".to_string(),
+        None => "invalid item".to_string(),
+    }
 }
 
 // TODO: [INSERT LAST FUNCTION HERE]
@@ -78,7 +114,6 @@ mod test {
         let result: i32 = return_rustacean() as i32;
         assert_eq!(result, 0x1f980);
     }
-
 
     #[test]
     fn test_match_item() {
