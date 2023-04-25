@@ -14,7 +14,14 @@ pub enum Operation {
 impl Operation {
     // [COMPLETE THIS FUNCTION]
     pub fn from_char(symbol: char) -> Option<Operation> {
-        todo!();
+        match symbol {
+            '+' => Some(Operation::Add),
+            '-' => Some(Operation::Subtract),
+            '*' => Some(Operation::Multiply),
+            '/' => Some(Operation::Divide),
+            '%' => Some(Operation::Modulo),
+            _ => None,
+        }
     }
 }
 
