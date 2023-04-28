@@ -20,8 +20,20 @@ pub enum ColorError {
 /// If the color String is invalid (doesn't match with the enum), return an Err(InvalidColor)
 /// If the color Stirng is empty, return an Err(EmptyColor)
 pub fn color_string_to_enum(color: Option<String>) -> Result<Color, ColorError> {
-    // [Your code here...]
-    todo!();
+    match color {
+        Some(color_string) => {
+            match color_string.as_str() {
+                "blue" => Ok(Color::Blue),
+                "orange" => Ok(Color::Orange),
+                "red" => Ok(Color::Red),
+                "green" => Ok(Color::Green),
+                "yellow" => Ok(Color::Yellow),
+                "purple" => Ok(Color::Purple),
+                _ => Err(ColorError::InvalidColor),
+            }
+        }
+        None => Err(ColorError::EmptyColor),
+    }
 }
 
 /// TODO: Implement this function
@@ -30,7 +42,25 @@ pub fn color_string_to_enum(color: Option<String>) -> Result<Color, ColorError> 
 /// If the number passed in is less than or equal to 0, return None
 pub fn fibonacci_odd_sum(target: i32) -> Option<(i32, i32)> {
     // [Your code here...]
-    todo!();
+
+    fn helper(target: i32, prev: i32, cur: i32, sum: i32) -> Option<(i32, i32)> {
+        match cur <= target {
+            false => Some((sum, prev)),
+            true => {
+                let next_sum = sum + match cur % 2 {
+                    0 => 0,
+                    _ => cur,
+                };
+
+                helper(target, cur, prev+cur, next_sum)
+            },
+        }
+    }
+
+    match target > 0 {
+        false => None,
+        true => helper(target, 0, 1, 0)
+    }
 }
 
 // You can test your code with the test cases we've provided by running `cargo test`
@@ -45,12 +75,10 @@ mod test {
         assert!(matches!(color_string_to_enum(Some("orange".to_string())), Ok(Color::Orange)));
     }
 
-
     #[test]
     fn test_fibonacci_odd_sum() {
         assert_eq!(fibonacci_odd_sum(-21), None);
         assert_eq!(fibonacci_odd_sum(4904859), Some((4613732, 3524578)));
         assert_eq!(fibonacci_odd_sum(1111111111), Some((1485607536, 701408733)));
     }
-
 }
