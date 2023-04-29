@@ -10,5 +10,5 @@ fn main() {
     println!("Formula 2: {:?}", mun);
     
     // You will need to write this function first
-    // println!("Runner: {}", hw3::runner());
+    println!("Runner: {}", hw3::runner());
 }
