@@ -3,7 +3,13 @@
 /// string representation (irrespective of if it already has a M or not)
 /// Make sure to derefence cards before changing it
 pub fn mark_cards(cards: &mut Vec<String>) {
-    todo!();
+    cards
+        .iter_mut()
+        .enumerate()
+        .filter(|(i, _)| (i + 1) % 3 == 0)
+        .for_each(|(_, card)| {
+            *card = format!("M{}", card);
+        });
 }
 
 /// TODO: Implement the perfect_bridge function
@@ -14,12 +20,19 @@ pub fn mark_cards(cards: &mut Vec<String>) {
 /// And the second card of the first half resides in the 3rd position etc.
 /// After shuffling return the deck
 pub fn perfect_bridge(cards: &Vec<String>) -> Vec<String> {
-    todo!();
+    let (first, sec) = cards.split_at(cards.len() / 2);
+    first
+        .iter()
+        .zip(sec.iter())
+        .flat_map(|(card1, card2)| vec![card1.clone(), card2.clone()])
+        .collect()
 }
 
 /// TODO: Implement the runner function
 /// Takes a vector of strings representing a deck of cards
 /// Shuffle the cards, then mark the cards, and finally shuffle them again
 pub fn runner(cards: &mut Vec<String>) {
-    todo!();
+    *cards = perfect_bridge(cards);
+    mark_cards(cards);
+    *cards = perfect_bridge(cards);
 }

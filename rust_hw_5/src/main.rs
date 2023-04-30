@@ -9,5 +9,6 @@ fn main() {
     let runner_cards: &mut Vec<String> = &mut cards.clone();
     println!("Regular Deck -> {:?}", cards);
     println!("Perfect Bridge -> {:?}", hw5::perfect_bridge(cards));
-    println!("Runner -> {:?}", hw5::runner(runner_cards));
+    hw5::runner(runner_cards);
+    println!("Runner -> {:?}", runner_cards);
 }
