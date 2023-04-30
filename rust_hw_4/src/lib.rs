@@ -5,13 +5,34 @@
 /// You should return a tuple containg a Vector of the reversed words 
 /// and the total number of vowels from odd lengthed words.
 pub fn vector_iter(words: &mut Vec<String>) -> (Vec<String>, i32) {
-    todo!();
+    words.iter_mut().map(|word| {
+        match word.len() & 1 {
+            0 => {
+                reverse_word(word);
+                (Some(word.clone()), 0)
+            },
+            _ => (None, count_vowels(word)),
+        }
+    }).fold((Vec::new(), 0), |(mut acc_reversed, acc_count), (reversed_word, count)| {
+        match reversed_word {
+            Some(reversed) => {
+                acc_reversed.push(reversed);
+                (acc_reversed, acc_count)
+            },
+            None => (acc_reversed, acc_count + count)
+        }
+    })
 }
 
 /// TODO: Implement this function that takes a String and reverses it.
 /// This should directly modify the contents of the passed String.
 pub fn reverse_word(word: &mut String) {
-    todo!();
+    let mut reversed = String::with_capacity(word.len());
+    for c in word.chars().rev() {
+        reversed.push(c);
+    }
+
+    *word = reversed;
 }
 
 /// TODO: Implement this function that takes a String and counts the number of vowels in it.
@@ -20,7 +41,7 @@ pub fn reverse_word(word: &mut String) {
 /// You should not modify the contents of the passed String.
 /// You should return the vowel count.
 pub fn count_vowels(word: &str) -> i32 {
-    todo!();
+    word.chars().filter(|c| "aeiouAEIOU".contains(*c)).count() as i32
 }
 
 
@@ -37,5 +58,4 @@ mod test {
         assert_eq!(reversed_words, vec!["hsif".to_string(), "kraavdra".to_string() ,"drib".to_string()]);
         assert_eq!(count, 3);
     }
-
 }
