@@ -34,7 +34,13 @@ impl Dataset {
     /// @return a String indicating the label of the piece of data closest in
     ///         distance to the given input
     pub fn predict(&self, input: &Vec<f64>) -> String {
-        todo!()
+        self.matrix
+            .iter()
+            .zip(&self.labels)
+            .map(|(row, label)| (distance(row, input), label))
+            .min_by(|(dist_a, _), (dist_b, _)| dist_a.partial_cmp(dist_b).unwrap())
+            .map(|(_, label)| label.clone())
+            .unwrap_or_default()
     }
 }
 
@@ -70,7 +76,14 @@ pub fn distance(a: &Vec<f64>, b: &Vec<f64>) -> f64 {
 /// @param means - a Vector containing the mean of each COLUMN
 /// @param stds - a Vector containing the standard deviation of each COLUMN
 pub fn normalize(data: &mut Vec<Vec<f64>>, means: &Vec<f64>, stds: &Vec<f64>) {
-    todo!()
+    data.iter_mut().for_each(|row| {
+        row.iter_mut()
+            .zip(means.iter())
+            .zip(stds.iter())
+            .for_each(|((value, mean), std)| {
+                *value = (*value - *mean) / *std;
+            })
+    })
 }
 
 /// [IMPLEMENT THIS FUNCTION]
@@ -81,7 +94,14 @@ pub fn normalize(data: &mut Vec<Vec<f64>>, means: &Vec<f64>, stds: &Vec<f64>) {
 /// @param data - a 2D Matrix of data
 /// @return a vector that contains the mean of each COLUMN in the given dataset.
 pub fn mean(data: &Vec<Vec<f64>>) -> Vec<f64> {
-    todo!()
+    let row_num = data.len();
+    let col_num = data[0].len();
+    
+    (0..col_num)
+        .map(|column| 
+            data.iter().fold(0f64, |acc, row| acc + row[column]) / (row_num as f64)
+        )
+        .collect()
 }
 
 /// [IMPLEMENT THIS FUNCTION]
@@ -101,5 +121,12 @@ pub fn mean(data: &Vec<Vec<f64>>) -> Vec<f64> {
 /// @return a vector that contains the standard deviation of each COLUMN in the
 ///         given dataset.
 pub fn std(data: &Vec<Vec<f64>>, means: &Vec<f64>) -> Vec<f64> {
-    todo!()
+    let row_num = data.len();
+    let col_num = data[0].len();
+
+    (0..col_num).map(|column| {
+        (data.iter().fold(0.0f64, |acc, row| {
+            acc + (row[column] - means[column]).powf(2.0)
+        }) / row_num as f64).sqrt()
+    }).collect()
 }
