@@ -27,7 +27,10 @@ pub fn student_init(name: String, netid: String) -> Student {
 /// This function initializes a class with the given name and an empty list of students
 /// It should set the class name to the given String and the list of students to a new empty vector
 pub fn class_init(name: String) -> Class {
-    todo!();
+    Class {
+        name,
+        attendance: vec![],
+    }
 }
 
 /// This function returns information about the given student
@@ -39,18 +42,36 @@ pub fn student_info(student: &Student) -> (String, String) {
 /// This function returns information about the given class
 /// It returns the name of the class and the number of students enrolled
 pub fn class_info(class: &Class) -> (String, usize) {
-    todo!();
+    (class.name.clone(), class.attendance.len())
 }
 
 /// This function enrolls the given student in the given class
 /// It then returns the full attendance list for the class
 pub fn class_enrollment(student: &Student, class: &mut Class) -> Vec<Student> {
-    todo!();
+    class.attendance.push(student.clone());
+    return class.attendance.clone();
 }
 
 /// This function returns some vector of the given students 
 /// and whether they are enrolled in the given class
 /// If their are no students enrolled then return None
 pub fn get_attendance(students: Vec<&Student>, class: &Class) -> Option<Vec<(Student, bool)>> {
-    todo!();
+    let mut empty = true;
+
+    let attendence = students
+        .iter()
+        .map(|student| {
+            let enrolled =  class.attendance.contains(*student);
+            if enrolled {
+                empty = false;
+            }
+
+            ((*student).clone(), enrolled)
+        })
+        .collect();
+
+    match empty {
+        true => None,
+        false => Some(attendence)
+    }
 }
