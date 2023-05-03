@@ -25,19 +25,19 @@ impl Student {
     /// Initialize a new student
     /// Set the students schedule with a new empty schedule
     pub fn new(name: String, netid: String) -> Student {
-        todo!();
+        Student { name, netid, schedule: Schedule::new(vec![]), }
     }
 
     // TODO: Implement this function
     /// Enroll a student in a schedule
     pub fn schedule_enrollment(&mut self, schedule: Schedule) {
-        todo!();
+        self.schedule = schedule
     }
 
     // TODO: Implement this function
     /// Check if a student is a classmate of another student
     pub fn is_classmate(&self, other: &Student) -> bool {
-        todo!();
+        self.schedule.classes.iter().any(|class| other.schedule.classes.contains(class))
     }
 }
 
@@ -45,7 +45,10 @@ impl Class {
     // TODO: Implement this function
     /// Initialize a new class
     pub fn new(name: String, credit_hours: u8) -> Class {
-        todo!();
+        Class {
+            name,
+            credit_hours,
+        }
     }
 }
 
@@ -54,6 +57,9 @@ impl Schedule {
     /// Initialize a new schedule
     /// Credit hours should be total up from the classes
     pub fn new(classes: Vec<Class>) -> Schedule {
-        todo!();
+        Schedule {
+            credit_hours: classes.iter().fold(0u8, |cur, class| cur + class.credit_hours),
+            classes,
+        }
     }
 }
