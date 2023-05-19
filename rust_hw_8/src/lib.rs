@@ -19,29 +19,57 @@ impl<T: Clone> LinkedList<T> {
     /// New instance of LinkedList
     /// It should have no front and a length of 0
     pub fn new() -> Self {
-        todo!();
+        LinkedList {
+            front: None,
+            length: 0,
+        }
     }
 
     /// Returns the length of the list
     pub fn len(&self) -> usize {
-        todo!();
+        self.length
     }
 
     /// Returns true if the list is empty
     pub fn is_empty(&self) -> bool {
-        todo!();
+        self.length == 0
     }
 
     /// Adds an element to the front of the list
     /// Hint - use the `front` pointer
     pub fn add_front(&mut self, thing: T) {
-        todo!();
+        match self.is_empty() {
+            true => {
+                self.front = Some(Box::new(Link::new(thing)));
+            },
+            false => {
+                let mut new_link = Some(Box::new(Link::new(thing)));
+                new_link.as_mut().unwrap().next = self.front.take();
+                self.front = new_link.take();
+            }
+        }
+
+        self.length += 1;
     }
 
     /// Adds an element to the back of the list
     /// You must interate through the list to find the end
     pub fn add_back(&mut self, thing: T) {
-        todo!();
+        match self.is_empty() {
+            true => {
+                self.front = Some(Box::new(Link::new(thing)));
+            },
+            false => {
+                let mut cur = self.front.as_mut();
+                while cur.as_ref().unwrap().next.is_some() {
+                    cur = cur.unwrap().next.as_mut();
+                }
+
+                cur.unwrap().next = Some(Box::new(Link::new(thing)));
+            }
+        }
+
+        self.length += 1;
     }
 
     /// [HELPER FUNCTION - DO NOT CHANGE]
@@ -64,7 +92,10 @@ impl<T> Link<T> {
 
     /// New instance of Link
     /// It should store the thing and None for its next Link
-    fn new(thing: T) -> Self {
-        todo!();
+    pub fn new(thing: T) -> Self {
+        Link {
+            thing: thing,
+            next: None,
+        }
     }
 }
