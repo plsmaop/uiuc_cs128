@@ -7,7 +7,9 @@ use std::thread::JoinHandle;
 /// Return a new vector containing all the integers that 
 /// have the sum of their digits divisible by 9
 pub fn compute(keys: Vec<i32>) ->  Vec<i32> {
-    todo!();
+    keys.into_iter()
+        .filter(|&x| x.to_string().chars().map(|d| d.to_digit(10).unwrap() as i32).sum::<i32>() % 9 == 0)
+        .collect()
 }
 
 /// TODO: Implement split
@@ -17,7 +19,16 @@ pub fn compute(keys: Vec<i32>) ->  Vec<i32> {
 /// Return a tuple that contains a vector of the join handles and the receiver
 /// WE WILL GIVE NICE NUMBERS
 pub fn split(num_per_chunk: i32, keys: Vec<i32>) -> (Vec<JoinHandle<()>>, Receiver<Vec<i32>>) {
-    todo!();
+    let (tx, rx) = channel();
+
+    (keys.chunks(num_per_chunk as usize).map(|chunk| {
+        let tx = tx.clone();
+        let chunk = chunk.to_vec();
+
+        thread::spawn(move || {
+            tx.send(compute(chunk)).unwrap();
+        })
+    }).collect(), rx)
 }
 
 /// TODO: Implement Join
@@ -26,7 +37,16 @@ pub fn split(num_per_chunk: i32, keys: Vec<i32>) -> (Vec<JoinHandle<()>>, Receiv
 /// put together the received value to create an output Vec<i32> of all the integers in the original list
 /// whose digits sum to a number divisible by 9
 pub fn join(a : Vec<JoinHandle<()>>, b : Receiver<Vec<i32>>) -> Vec<i32> {
-    todo!();
+    for handle in a {
+        handle.join().unwrap();
+    }
+
+    let mut output = Vec::new();
+    while let Ok(result) = b.try_recv() {
+        output.extend(result);
+    }
+
+    output
 }
 
 // [HELPER FUNCTION]
